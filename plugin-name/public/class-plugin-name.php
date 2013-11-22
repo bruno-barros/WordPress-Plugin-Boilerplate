@@ -93,6 +93,16 @@ class Plugin_Name {
 	public function get_plugin_slug() {
 		return $this->plugin_slug;
 	}
+	
+	/**
+	 * Return the class name
+	 * 
+	 * @return string
+	 */
+	public function get_class_name()
+	{
+		return get_class($this);
+	}
 
 	/**
 	 * Return an instance of this class.
