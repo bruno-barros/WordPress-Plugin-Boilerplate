@@ -266,7 +266,7 @@ class Plugin_Name {
 		$domain = $this->plugin_slug;
 		$locale = apply_filters( 'plugin_locale', get_locale(), $domain );
 
-		load_textdomain( $domain, trailingslashit( WP_LANG_DIR ) . $domain . '/' . $domain . '-' . $locale . '.mo' );
+		load_textdomain( $domain, trailingslashit( plugin_dir_path( __DIR__ ) ) .'languages/' . $domain . '-' . $locale . '.mo' );
 
 	}
 
