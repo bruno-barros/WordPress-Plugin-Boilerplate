@@ -75,6 +75,9 @@ class Plugin_Name_Admin {
 
 		// Add the options page and menu item.
 		add_action( 'admin_menu', array( $this, 'add_plugin_admin_menu' ) );
+		
+		// create metabox on posts
+		// add_action( 'add_meta_boxes', array( $this, 'add_meta_box' ) );
 
 		// Add an action link pointing to the options page.
 		$plugin_basename = plugin_basename( plugin_dir_path( __DIR__ ) . $plugin->get_class_name() . '.php' );
@@ -245,6 +248,29 @@ class Plugin_Name_Admin {
 	 */
 	public function filter_method_name() {
 		// @TODO: Define your filter hook callback here
+	}
+	
+	
+	/**
+	 * Cria metabox
+	 * @param string $postType
+	 */
+	public function add_meta_box($postType)
+	{
+		if ( current_user_can('manage_options') && $postType !== 'page' )
+		{
+			//add_meta_box( $id, $title, $callback, $post_type, $context, $priority, $callback_args );			
+			add_meta_box($this->plugin_slug, __('Metabox title', $this->plugin_slug), array($this, "render_meta_box"), $postType, 'side', 'high');
+		}
+	}
+
+	/**
+	 * Monta view do metabox
+	 * 
+	 */
+	public function render_meta_box()
+	{
+		global $wpdb, $post;
 	}
 
 }
