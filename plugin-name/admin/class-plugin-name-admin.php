@@ -84,6 +84,9 @@ class Plugin_Name_Admin {
 
 		// Add a column to the edit post list
 		// add_filter( 'manage_posts_columns', array( $this, 'filter_add_new_columns' ), 10, 2);
+		
+		// load custom sortable filter
+		// add_action( 'load-edit.php', array( $this, 'action_load_sortable_columns' ) );
 
 		// Add an action link pointing to the options page.
 		$plugin_basename = plugin_basename( plugin_dir_path( __DIR__ ) . $plugin->get_class_name() . '.php' );
@@ -307,6 +310,43 @@ class Plugin_Name_Admin {
 				echo $metaData;
 			break;
 		}
+	}
+	
+	/**
+	 * Add filter for sort posts
+	 * @return void
+	 */
+	public function action_load_sortable_columns()
+	{
+		add_filter( 'request', array($this, 'filter_sortable_columns') );
+	}
+
+	/**
+	 * Do filter
+	 * Posts then do not have meta_key will not be shown
+	 * @param  array $vars 
+	 * @return array
+	 */
+	public function filter_sortable_columns($vars = '')
+	{
+		// check correct post types
+		if ( isset( $vars['post_type'] ) && 'page' !== $vars['post_type'] ) {
+
+			// check if orderby is set to 'my-custom-col'
+			if ( isset( $vars['orderby'] ) && 'my-custom-col' == $vars['orderby'] ) {
+
+				// Merge the query vars with our custom variables.
+				$vars = array_merge(
+					$vars,
+					array(
+						'meta_key' => '_my_meta_data_key',
+						'orderby' => 'meta_value'
+					)
+				);
+			}
+		}
+
+		return $vars;
 	}
 
 }
