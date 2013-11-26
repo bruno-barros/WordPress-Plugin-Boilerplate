@@ -78,6 +78,12 @@ class Plugin_Name_Admin {
 		
 		// create metabox on posts
 		// add_action( 'add_meta_boxes', array( $this, 'add_meta_box' ) );
+		
+		// Add action to the manage post column to display the data
+		// add_action( 'manage_posts_custom_column' , array( $this, 'action_custom_columns' ) );
+
+		// Add a column to the edit post list
+		// add_filter( 'manage_posts_columns', array( $this, 'filter_add_new_columns' ), 10, 2);
 
 		// Add an action link pointing to the options page.
 		$plugin_basename = plugin_basename( plugin_dir_path( __DIR__ ) . $plugin->get_class_name() . '.php' );
@@ -271,6 +277,36 @@ class Plugin_Name_Admin {
 	public function render_meta_box()
 	{
 		global $wpdb, $post;
+	}
+	
+	/**
+	 * Add new columns to the post table
+	 *
+	 * @param array $columns Current columns on the list post
+	 */
+	public function filter_add_new_columns( $columns ) {
+		// my custom columns
+		$column_meta = array( 'my-custom-col' => 'My Custom Column' );
+		// position of the colum on the columns array
+		$columns = array_slice( $columns, 0, 2, true ) + $column_meta + array_slice( $columns, 2, NULL, true );
+		return $columns;
+	}
+
+	/**
+	 * Add content to custom columns when listing
+	 * @param  string $column Column index
+	 * @return string
+	 */
+	public function action_custom_columns($column = '')
+	{
+		global $post;
+
+		switch ( $column ) {
+			case 'my-custom-col':
+				$metaData = 'My custom value';
+				echo $metaData;
+			break;
+		}
 	}
 
 }
